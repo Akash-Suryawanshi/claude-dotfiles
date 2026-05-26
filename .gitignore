@@ -39,6 +39,9 @@ commands/ship.md
 # local hook overrides
 hooks/*.local.*
 
+# html-response runtime state (per-machine response artifacts + server pid/log)
+skills/html-response/state/
+
 # 5) Editor / OS noise inside tracked dirs.
 **/.DS_Store
 **/*.swp

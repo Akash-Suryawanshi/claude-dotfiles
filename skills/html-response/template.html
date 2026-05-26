@@ -1,0 +1,401 @@
+<!doctype html>
+<!--
+  html-response skill · canonical template.
+  When composing a response, copy this whole file, then replace ONLY the four
+  marker comments:
+      <!--TITLE-->         <-- short page title (also the browser tab)
+      <!--EYEBROW-->       <-- tiny mono uppercase label above title (e.g., "HAB-19 · STATUS")
+      <!--TIMESTAMP-->     <-- ISO-ish human time, e.g. "2026-05-14 · 16:34 IST"
+      <!--CONTENT-->       <-- the response body, as HTML blocks (see SKILL.md catalog)
+  Everything else (CSS, scripts, fonts, refresh logic) is locked — do not edit.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><!--TITLE--></title>
+
+  <!-- Fonts: Cormorant Garamond italic for accents · JetBrains Mono for eyebrows + code · Inter for body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- KaTeX for math -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}], throwOnError:false});"></script>
+
+  <!-- highlight.js for syntax-highlighted code -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/styles/atom-one-dark.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/highlight.min.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => hljs.highlightAll());</script>
+
+  <!-- mermaid for diagrams (init lazily) -->
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'dark', themeVariables: {
+      darkMode: true,
+      background: '#0A0907',
+      primaryColor: '#1a1714',
+      primaryTextColor: '#F0EBE0',
+      primaryBorderColor: '#D4AB68',
+      lineColor: '#D4AB68',
+      secondaryColor: '#5C2329',
+      tertiaryColor: '#1a1714',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }});
+  </script>
+
+  <style>
+    :root {
+      /* Quiet Luxury — matches the locked Habit Tracker chassis */
+      --bg: #0A0907;
+      --bg-lift: #15110D;
+      --surface: rgba(255,255,255,0.025);
+      --surface-2: rgba(255,255,255,0.045);
+      --border: rgba(212,171,104,0.08);
+      --border-2: rgba(212,171,104,0.20);
+      --ink: #F0EBE0;
+      --ink-2: rgba(240,235,224,0.62);
+      --ink-3: rgba(240,235,224,0.38);
+      --gold: #D4AB68;
+      --gold-deep: #9F7937;
+      --gold-tint: rgba(212,171,104,0.14);
+      --maroon: #5C2329;
+      --success: #A3BE8C;
+      --warning: #EBCB8B;
+      --danger: #BF616A;
+
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { background: var(--bg); color: var(--ink); margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 15.5px;
+      line-height: 1.62;
+      letter-spacing: -0.005em;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold-tint); transition: border-color .15s; }
+    a:hover { border-bottom-color: var(--gold); }
+
+    code, pre, .mono { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace; }
+
+    /* ── Layout ── */
+    .r-page { max-width: 920px; margin: 0 auto; padding: 64px 32px 96px; }
+
+    /* ── Header ── */
+    .r-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 18px;
+    }
+    .r-eyebrow .r-eyebrow-accent { color: var(--gold); }
+    .r-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 52px;
+      line-height: 1.05;
+      color: var(--ink);
+      margin: 0 0 12px 0;
+      background: linear-gradient(180deg, #F8F1E3 0%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .r-lede {
+      color: var(--ink-2);
+      font-size: 17px;
+      line-height: 1.55;
+      margin: 4px 0 40px 0;
+      max-width: 70ch;
+    }
+    .r-rule {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-2), transparent);
+      margin: 48px 0;
+      border: 0;
+    }
+
+    /* ── Headings ── */
+    .r-h2 {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      margin: 48px 0 16px 0;
+    }
+    .r-h2-accent {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-weight: 500;
+      color: var(--gold);
+    }
+    .r-h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin: 32px 0 12px 0;
+    }
+
+    /* ── Prose ── */
+    .r-prose p { margin: 0 0 14px 0; max-width: 72ch; }
+    .r-prose ul, .r-prose ol { margin: 0 0 14px 0; padding-left: 20px; max-width: 72ch; }
+    .r-prose li { margin: 4px 0; }
+    .r-prose em { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 500; color: var(--gold); font-size: 1.08em; }
+    .r-prose strong { color: var(--ink); font-weight: 600; }
+    .r-prose code { background: var(--gold-tint); color: var(--gold); padding: 1px 6px; border-radius: 4px; font-size: 0.88em; border: 1px solid var(--border); }
+
+    /* ── Callout ── */
+    .r-callout {
+      border-left: 2px solid var(--gold);
+      background: var(--surface);
+      padding: 16px 20px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin: 18px 0;
+    }
+    .r-callout.info  { border-left-color: var(--gold); }
+    .r-callout.warn  { border-left-color: var(--warning); }
+    .r-callout.danger { border-left-color: var(--danger); }
+    .r-callout.success { border-left-color: var(--success); }
+    .r-callout-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    /* ── Insight (matches the "★ Insight" pattern) ── */
+    .r-insight {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      margin: 22px 0;
+      position: relative;
+    }
+    .r-insight::before {
+      content: "★";
+      color: var(--gold);
+      font-size: 14px;
+      margin-right: 8px;
+    }
+    .r-insight-title {
+      display: inline;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .r-insight ul { margin: 10px 0 0 0; padding-left: 20px; }
+    .r-insight li { margin: 6px 0; color: var(--ink-2); }
+
+    /* ── Grids (side-by-side panels) ── */
+    .r-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0; }
+    .r-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 18px 0; }
+    @media (max-width: 760px) {
+      .r-grid-2, .r-grid-3 { grid-template-columns: 1fr; }
+    }
+
+    /* ── Card / surface panel ── */
+    .r-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+    .r-card .r-card-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 10px;
+    }
+
+    /* ── Big stat ── */
+    .r-stat { padding: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .r-stat-value {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 56px;
+      line-height: 1;
+      background: linear-gradient(180deg, #F8F1E3 0%, var(--gold) 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .r-stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+
+    /* ── Table ── */
+    .r-table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+    .r-table th {
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      font-weight: 500;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-2);
+    }
+    .r-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--ink-2);
+      vertical-align: top;
+    }
+    .r-table tr:last-child td { border-bottom: none; }
+    .r-table td strong, .r-table td .r-em { color: var(--gold); }
+
+    /* ── Code blocks ── */
+    pre {
+      background: #1a1714 !important;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px !important;
+      margin: 16px 0;
+      overflow-x: auto;
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+    pre code { background: transparent !important; padding: 0 !important; border: none !important; color: var(--ink); }
+
+    /* ── KaTeX tweaks ── */
+    .katex { font-size: 1.04em; color: var(--ink); }
+    .katex-display { margin: 18px 0 !important; padding: 8px 0; }
+
+    /* ── Mermaid container ── */
+    .r-mermaid { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px; margin: 18px 0; overflow-x: auto; }
+    .mermaid { background: transparent !important; }
+
+    /* ── Collapsible ── */
+    details.r-collapsible { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0; margin: 14px 0; background: var(--surface); }
+    details.r-collapsible > summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 12px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    details.r-collapsible > summary::-webkit-details-marker { display: none; }
+    details.r-collapsible > summary::before { content: "▸ "; color: var(--gold-deep); transition: transform .15s; display: inline-block; }
+    details.r-collapsible[open] > summary::before { transform: rotate(90deg); }
+    details.r-collapsible > .r-collapsible-body { padding: 0 18px 16px; border-top: 1px solid var(--border); padding-top: 16px; }
+
+    /* ── Math inline emphasis when math is in a heading ── */
+    h1 .katex, .r-title .katex { font-size: 0.88em; }
+
+    /* ── Footer ── */
+    .r-footer {
+      margin-top: 80px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+    .r-footer a { color: var(--ink-3); border: none; }
+    .r-footer a:hover { color: var(--gold); }
+
+    /* ── Refresh status pill (only shown when auto-refresh is active) ── */
+    #r-refresh-pill {
+      position: fixed; bottom: 18px; right: 18px;
+      padding: 6px 12px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--ink-3);
+      backdrop-filter: blur(8px);
+      opacity: 0; transition: opacity .25s;
+    }
+    #r-refresh-pill.visible { opacity: 1; }
+    #r-refresh-pill .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-right: 6px; vertical-align: middle; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* ── Print ── */
+    @media print {
+      body { background: white; color: black; }
+      #r-refresh-pill { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="r-page">
+    <div class="r-eyebrow"><!--EYEBROW--></div>
+    <h1 class="r-title"><!--TITLE--></h1>
+    <hr class="r-rule">
+
+    <!--CONTENT-->
+
+    <footer class="r-footer">
+      <span><!--TIMESTAMP--></span>
+      <span><a href="/index">all responses</a></span>
+    </footer>
+  </div>
+
+  <div id="r-refresh-pill"><span class="dot"></span>auto-refresh</div>
+
+  <script>
+    // Auto-refresh logic: poll /version every 3s, reload only when changed.
+    // Active only when served at root path "/" — direct file URLs stay static.
+    (function() {
+      const isLatest = (location.pathname === '/' || location.pathname === '');
+      if (!isLatest) return;
+      const pill = document.getElementById('r-refresh-pill');
+      pill.classList.add('visible');
+      let lastVersion = null;
+      async function check() {
+        try {
+          const r = await fetch('/version', { cache: 'no-store' });
+          if (!r.ok) return;
+          const { latest } = await r.json();
+          if (lastVersion === null) { lastVersion = latest; return; }
+          if (latest !== lastVersion) {
+            // Preserve scroll position across reload
+            sessionStorage.setItem('r-scroll', window.scrollY);
+            location.reload();
+          }
+        } catch (e) { /* server momentarily down — keep trying */ }
+      }
+      const saved = sessionStorage.getItem('r-scroll');
+      if (saved) { window.scrollTo(0, parseInt(saved, 10)); sessionStorage.removeItem('r-scroll'); }
+      setInterval(check, 3000);
+      check();
+    })();
+  </script>
+</body>
+</html>
