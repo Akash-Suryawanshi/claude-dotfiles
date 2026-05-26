@@ -1,0 +1,47 @@
+# claude-dotfiles — deny-by-default whitelist
+# We track only the portable, sharable subset of ~/.claude/.
+# Anything not explicitly un-ignored stays out of git.
+
+# 1) Deny everything at the top level by default.
+/*
+
+# 2) Explicit allow-list of tracked top-level entries.
+!.gitignore
+!README.md
+!setup.sh
+!CLAUDE.md
+!settings.json
+!hooks/
+!skills/
+!commands/
+!agents/
+
+# 3) Hard belt-and-suspenders denials.
+# Even if a future edit accidentally `git add`s these paths,
+# git refuses to stage them.
+.credentials.json
+.credentials.*.json
+*.token
+*.key
+*secret*
+.env
+.env.*
+**/credentials.json
+**/auth.json
+
+# 4) Inside the allow-listed dirs, ignore project-specific files
+# that stay local-only. (Inline comments aren't valid here — must be
+# their own line.)
+
+# work/ticket-specific shipping command
+commands/ship.md
+
+# local hook overrides
+hooks/*.local.*
+
+# 5) Editor / OS noise inside tracked dirs.
+**/.DS_Store
+**/*.swp
+**/*~
+**/__pycache__/
+**/.ipynb_checkpoints/

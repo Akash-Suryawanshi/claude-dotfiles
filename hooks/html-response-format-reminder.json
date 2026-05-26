@@ -1,0 +1,6 @@
+{
+  "hookSpecificOutput": {
+    "hookEventName": "UserPromptSubmit",
+    "additionalContext": "HTML RESPONSE FORMAT (user-scope hook reminder). If the current project's CLAUDE.md, project memory, or any `.claude/hookify.*.local.md` file mentions an HTML response format requirement, follow it for every response — including clarifying-question turns and plan-mode turns. The typical pattern: write the substantive answer as a per-response HTML file (e.g. `/tmp/<viewer-dir>/html_<8-hex>.html`), then post a bare URL in chat (1–3 lines, no markdown wrapping). Lead the HTML with a 3–5 line tldr, prefer diagrams over prose, aim for ~half the natural length. ORDER: write HTML first, then post URL. Public IPs on cloud dev boxes typically rotate — look up live with `curl -s ifconfig.me`. If no project file mentions this format, ignore this reminder."
+  }
+}

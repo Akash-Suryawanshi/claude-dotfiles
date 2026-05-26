@@ -31,8 +31,8 @@ Analyze the current git repository's staged and unstaged changes, intelligently 
      - NO Claude Code credits
 
 5. **Author Configuration**:
-   - Author: akash-ezzz <akash.sur@imerit.net>
-   - Set using: `git commit -m "<message>" --author="akash-ezzz <akash.sur@imerit.net>"`
+   - Use whatever `git config user.name` / `user.email` is set in the repo.
+   - If you need to override per-commit, pass `--author="Name <email>"` explicitly.
 
 6. **Output Format**:
    Present the commit plan clearly:
@@ -46,7 +46,7 @@ Analyze the current git repository's staged and unstaged changes, intelligently 
 
    Commit command:
    git add <files>
-   git commit -m "<branch-name>:- <commit message>" --author="akash-ezzz <akash.sur@imerit.net>"
+   git commit -m "<branch-name>:- <commit message>"
 
    ### Commit 2: <Feature Name>
    ...
