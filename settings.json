@@ -3,6 +3,10 @@
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_EFFORT_LEVEL": "max"
   },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "defaultMode": "auto"
   },
@@ -68,13 +72,8 @@
     "swift-lsp@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "max",
   "skipDangerousModePermissionPrompt": true,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  }
+  "voiceEnabled": true
 }
